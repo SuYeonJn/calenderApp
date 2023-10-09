@@ -1,17 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:scheduler/database/schedule_manager.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 
 import 'navigator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
-
-
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  static ScheduleManager schmng = ScheduleManager();
+  static int nowYear = DateTime.now().year;
+
+  static String formatTime(int hour, int minute) {
+    String ampm;
+    if (hour >= 12) {
+      ampm = "PM";
+      hour -= 12;
+    } else {
+      ampm = "AM";
+    }
+    if (hour == 0) {hour = 12;}
+    return "$hour:${(0 <= minute && minute < 10) ? "0" : ""}$minute $ampm";
+  }
+  
+   MyApp({super.key}) {
+    //We will be using this method as the real start of the app.
+    schmng.openDatabase();
+  }
 
   @override
   Widget build(BuildContext context) {
